@@ -1,0 +1,30 @@
+- hosts: idn
+  become: yes
+  vars: 
+    - image: audhie89/hextris_docker
+  tasks:
+    - name: install python module docker 
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - python
+        - python-docker
+      when: ansible_facts['os_family'] == "RedHat"
+
+
+    - name: pull image 
+      docker_image: 
+        name: "{{ image }}"
+        state: present 
+        force: yes
+
+
+    - name: create containers
+      docker_container:
+         name: docker-ansible 
+         image: "{{ image }}"
+         state: started 
+         published_ports:
+           - 1008:80
+         recreate: yes

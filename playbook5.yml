@@ -1,0 +1,13 @@
+- hosts: idn 
+  become: yes 
+  vars_files:
+   - variable 
+  
+  tasks: 
+    - name: started proxy
+      service:
+        name: "{{ proxy }}"
+        state: restarted
+      loop:
+        - "{{ sharing}}"
+        - "{{ script }}"
